@@ -1,0 +1,49 @@
+body {
+    font-family: 'Raleway';
+    display: flex;
+    justify-content: center;
+}
+
+#main {
+    position: absolute;
+    top: 25%;
+    width: 40%;
+    height: 40%;
+    border: solid black 2px;
+    border-radius: 20px;
+    box-shadow: grey 10px 0px 10px;
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+
+    h1 {
+        text-align: center;
+    }
+
+    div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+        margin: 10px;
+
+        * {
+            margin: 5px;
+        }
+
+        input[type=submit] {
+            background-color: whitesmoke;
+            border-radius: 5px;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            border: solid grey 1px;
+        }
+    }
+
+    #quizimg {
+        scale: .1;
+    }
+
+}
+
