@@ -1,0 +1,86 @@
+body {
+    font-family: 'Raleway';
+}
+
+.card {
+    margin: auto;
+    margin-top: 10vh;
+    padding: auto;
+    display: flex;
+    flex-direction: column;
+    border: solid black 2px;
+    box-shadow: rgba(128, 128, 128, 0.639) 2px 1px 50px 5px;
+    height: 70vh;
+    width: 25vw;
+    padding: 15px;
+
+    justify-content: space-evenly;
+    align-items: center;
+
+    #initDiv {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    #optionsDiv {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        
+        * {
+            margin: 5px;
+        }
+
+        #question {
+            text-align: center;
+            grid-column: 1/3;
+            font-size: 20px;
+        }
+
+        .option { 
+            font-family: 'Raleway';
+            font-size: 30px;
+            border: none;
+            color: black;
+            padding: 20px;
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+
+        .option:hover {
+            color: white;
+            box-shadow: lightgray 1px 1px 1px 2px;
+        }
+
+        #option1 {
+            background-color:crimson;
+        }
+
+        #option2 {
+            background-color:cornflowerblue;
+        }
+
+        #option3 {
+            background-color:darkseagreen;
+        }
+
+        #option4 {
+            background-color:khaki;
+        }
+    }
+
+    #startbutton {
+        font-family: 'Raleway';
+        font-size: 30px;
+        border: none;
+        color: white;
+        background-color: grey;
+        padding: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    #startbutton:hover {
+        transform: scale(1.05);
+    }
+}

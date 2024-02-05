@@ -4,6 +4,14 @@ body {
     justify-content: center;
 }
 
+#background {
+    position: absolute;
+
+    img {
+        width: 200px;
+    }
+}
+
 #main {
     position: absolute;
     top: 25%;
@@ -11,7 +19,8 @@ body {
     height: 40%;
     border: solid black 2px;
     border-radius: 20px;
-    box-shadow: grey 10px 0px 10px;
+    box-shadow: grey 2px 0px 5px;
+    background-color: white;
     display: flex;
     flex-direction: column;
 

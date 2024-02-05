@@ -1,16 +1,10 @@
-document.addEventListener('DOMContentLoaded', function (){
-    var form = document.querySelector('form');
+function readName(){
+    let tempname = document.getElementById('name').value;
 
-    form.addEventListener('submit', function (event){
-        event.preventDefault();
-
-        var nameInput = document.getElementById('name');
-        let playerName = nameInput.value;
-
-        if(playerName === ''){
-            alert('Provide a name');
-        } else {
-            window.location.href = 'quizmenu.html';
-        }
-    });
-});
+    if(tempname == ''){
+        alert('Name can not be empty');
+    } else {
+        localStorage.setItem('username', tempname);
+        window.location.href = 'quizmenu.html';
+    }
+}

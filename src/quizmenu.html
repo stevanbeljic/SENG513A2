@@ -6,7 +6,19 @@
         <link rel="stylesheet" href="stylesheets/quizmenu.css">
         <script type="text/javascript" src="scripts/quizmenu.js"></script>
     </head>
-    <body>
-        <p>Main quiz menu page</p>
+    <body onload="init()">
+        <div class="card">
+            <div id="initDiv">
+                <h2 id="welcomemessage"></h2>
+                <button id="startbutton" onclick="start()">Start</button>
+            </div>
+            <div id="optionsDiv">
+                <p id="question">What is your name?</p>
+                <button class="option"id="option1">Answer 1</button>
+                <button class="option" id="option2">Answer 2</button>
+                <button class="option" id="option3">Answer 3</button>
+                <button class="option" id="option4">Answer 4</button>
+            </div>
+        </div>
     </body>
 </html>

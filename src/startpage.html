@@ -5,17 +5,19 @@
         <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
         <link rel="stylesheet" href="stylesheets/startpage.css">
         <script type="text/javascript" src="scripts/startpage.js"></script>
+
     </head>
     <body>
+        <div id="background">
+        </div>
         <div id="main">
-            <!-- <img src="images/quiz.svg" id="quizimg"> -->
             <div><h1>Stevan's Quiz Game</h1></div>
             <div>
                 <form>
                     <div>
                         <label for="name">Name:</label>
                         <input type="text" id="name" name="name">
-                        <input type="submit" id="submithome" name = "submithome" value="Play!">
+                        <input type="button" id="submitname" onclick="readName()" value="Play!">
                     </div>
                 </form>
             </div>
