@@ -109,6 +109,16 @@ function updateScore(score){
     document.getElementById('scorecard').innerHTML = 'Score: '+score;
 }
 
+function gameOver(score){
+    const optionsDiv = document.getElementById('optionsDiv');
+    optionsDiv.style.display = "none";
+
+    const scorecard = document.getElementById('scorecard');
+    scorecard.innerHTML = 'Your final score was '+score+'<br>Thanks for playing!';
+    scorecard.style.fontSize = '30px';
+    scorecard.style.textAlign = 'center';
+}
+
 async function start(){
     const game = new Quiz();
 
@@ -137,14 +147,16 @@ async function start(){
         const selected = event.target.innerHTML;
         const correctSelection = game.quizQuestions[game.attempts-1].correctOption;
 
-        if(game.attempts > 10){
-            console.log('game over!');
-        } else if (selected === correctSelection){
+        if (selected === correctSelection){
             console.log('incremented')
 
             console.log('correct!');
             game.score+=10;
             updateScore(game.score);
+
+            if(game.attempts > 9) {
+                gameOver(game.score);
+            }
 
             let questionGenerated = game.questionGenerator().next();
             const question = questionGenerated.value;
@@ -152,6 +164,11 @@ async function start(){
         } else {
             console.log('incremented')
             console.log('Wrong answer!');
+
+            if(game.attempts > 10) {
+                gameOver(game.score);
+            }
+
             let questionGenerated = game.questionGenerator().next();
             const question = questionGenerated.value;
             displayQuestion(question);
