@@ -1,26 +1,36 @@
 class Quiz{
 
     score = 0;
+    attempts = 0;
+    quizQuestions;
 
     formatQuestion(obj) {
         return new Question(obj.question, obj.correct_answer, obj.incorrect_answers[0], obj.incorrect_answers[1], obj.incorrect_answers[2], obj.difficulty);
     }
 
-    generateQuiz() {
+    *questionGenerator(){
+        const tempQuestion = this.quizQuestions[this.attempts];
+        this.attempts++;
+        yield tempQuestion;
+    }
 
-        fetch('https://opentdb.com/api.php?amount=40&type=multiple')
+    async fetchQuiz() {
+
+        await fetch('https://opentdb.com/api.php?amount=40&type=multiple')
             .then(response => response.json())
             .then(data => {
                 const questions = [];
                 data.results.forEach(obj => {
                     questions.push(this.formatQuestion(obj));
                 });
-
-                console.log(questions);
+                
+                this.quizQuestions = questions;
             })
             .catch(error => console.error('Error:', error));
-    }
 
+        
+        console.log(this.quizQuestions);
+    }
     
 }
 
@@ -47,7 +57,11 @@ class Question{
     }
 
     get questionText() {
-        return questionTest;
+        return questionText;
+    }
+
+    get getCorrectAnswer(){
+        return this.correctOption;
     }
 
 }
@@ -70,6 +84,9 @@ function init(){
     const user = JSON.parse(tmp);
     const tmpName = user.username;
     document.getElementById('welcomemessage').innerHTML = 'Welcome, '+tmpName;
+
+    const scoreCard = document.getElementById('scorecard');
+    scoreCard.style.display = "none";
     
     const optionsDiv = document.getElementById('optionsDiv');
     optionsDiv.style.display = "none";
@@ -80,16 +97,70 @@ function printName(){
     document.getElementById('namep').innerHTML = username+' is here';
 }
 
-function start(){
+function displayQuestion(question){
+    document.getElementById('question').innerHTML = question.questionText;
+    document.getElementById('option1').innerHTML = question.correctOption;
+    document.getElementById('option2').innerHTML = question.incorrect1;
+    document.getElementById('option3').innerHTML = question.incorrect2;
+    document.getElementById('option4').innerHTML = question.incorrect3;
+}
+
+function updateScore(score){
+    document.getElementById('scorecard').innerHTML = 'Score: '+score;
+}
+
+async function start(){
     const game = new Quiz();
 
     const initDiv = document.getElementById('initDiv');
     initDiv.style.display = "none";
+
+    const scoreCard = document.getElementById('scorecard');
+    scoreCard.style.display = "block";
 
     const optionsDiv = document.getElementById('optionsDiv');
     optionsDiv.style.display = "grid";
     document.getElementById("question").style.gridColumn = "1/3";
     optionsDiv.style.gridTemplateColumns = "repeat(2, 1fr)";
 
-    game.generateQuiz();
+    await game.fetchQuiz();
+
+    const wrap = document.getElementById('buttonwrap');
+
+    //https://stackoverflow.com/questions/49680484/how-to-add-one-event-listener-for-all-buttons
+    wrap.addEventListener('click', (event) => {
+        const isButton = event.target.nodeName === 'BUTTON';
+        if (!isButton){
+            return ;
+        }
+
+        const selected = event.target.innerHTML;
+        const correctSelection = game.quizQuestions[game.attempts-1].correctOption;
+
+        if(game.attempts > 10){
+            console.log('game over!');
+        } else if (selected === correctSelection){
+            console.log('incremented')
+
+            console.log('correct!');
+            game.score+=10;
+            updateScore(game.score);
+
+            let questionGenerated = game.questionGenerator().next();
+            const question = questionGenerated.value;
+            displayQuestion(question);
+        } else {
+            console.log('incremented')
+            console.log('Wrong answer!');
+            let questionGenerated = game.questionGenerator().next();
+            const question = questionGenerated.value;
+            displayQuestion(question);
+        }
+    })
+    
+    const questionGenerator = game.questionGenerator();
+    let questionGenerated = questionGenerator.next();
+    const question = questionGenerated.value;
+    displayQuestion(question);
+
 }
