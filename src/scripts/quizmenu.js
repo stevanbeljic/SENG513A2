@@ -99,10 +99,19 @@ function printName(){
 
 function displayQuestion(question){
     document.getElementById('question').innerHTML = question.questionText;
-    document.getElementById('option1').innerHTML = question.correctOption;
-    document.getElementById('option2').innerHTML = question.incorrect1;
-    document.getElementById('option3').innerHTML = question.incorrect2;
-    document.getElementById('option4').innerHTML = question.incorrect3;
+    const occupiedSpaces = [];
+    
+    let placement = Math.floor((Math.random() * 4) + 1);
+    document.getElementById('option'+placement).innerHTML = question.correctOption;
+    occupiedSpaces.push(placement);
+
+    for(let x = 1; x <= 3; x++){
+        while (occupiedSpaces.includes(placement)){
+            placement = Math.floor((Math.random() * 4) + 1);
+        }
+        document.getElementById('option'+placement).innerHTML = question['incorrect'+x];
+        occupiedSpaces.push(placement);
+    }
 }
 
 function updateScore(score){
@@ -117,6 +126,27 @@ function gameOver(score){
     scorecard.innerHTML = 'Your final score was '+score+'<br>Thanks for playing!';
     scorecard.style.fontSize = '30px';
     scorecard.style.textAlign = 'center';
+}
+
+function highlightCorrect(correctButton, selection) {
+    const buttons = document.getElementsByClassName('option');
+
+    for (let i = 0; i < buttons.length; i++) {
+        const button = buttons[i];
+        if (button.innerHTML === correctButton) {
+            button.style.backgroundColor = "green";
+        } else if(button.innerHTML === selection){
+            button.style.backgroundColor = "DarkKhaki";
+        } else {
+            button.style.backgroundColor = "grey";
+        }
+    }
+
+    setTimeout(() => {
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].style.backgroundColor = "";
+        }
+    }, 1000);
 }
 
 async function start(){
@@ -148,30 +178,32 @@ async function start(){
         const correctSelection = game.quizQuestions[game.attempts-1].correctOption;
 
         if (selected === correctSelection){
-            console.log('incremented')
-
-            console.log('correct!');
             game.score+=10;
             updateScore(game.score);
+            
+            highlightCorrect(correctSelection, selected);
 
             if(game.attempts > 9) {
                 gameOver(game.score);
             }
 
-            let questionGenerated = game.questionGenerator().next();
-            const question = questionGenerated.value;
-            displayQuestion(question);
+            setTimeout(() => {
+                let questionGenerated = game.questionGenerator().next();
+                const question = questionGenerated.value;
+                displayQuestion(question);
+            }, 1000);
         } else {
-            console.log('incremented')
-            console.log('Wrong answer!');
+            highlightCorrect(correctSelection, selected);
 
             if(game.attempts > 10) {
                 gameOver(game.score);
             }
 
-            let questionGenerated = game.questionGenerator().next();
-            const question = questionGenerated.value;
-            displayQuestion(question);
+            setTimeout(() => {
+                let questionGenerated = game.questionGenerator().next();
+                const question = questionGenerated.value;
+                displayQuestion(question);
+            }, 1000);
         }
     })
     
