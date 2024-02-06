@@ -11,7 +11,8 @@ body {
     border: solid black 2px;
     box-shadow: rgba(128, 128, 128, 0.639) 2px 1px 50px 5px;
     height: 70vh;
-    width: 25vw;
+    min-height: 400px;
+    width: 420px;
     padding: 15px;
 
     justify-content: space-evenly;

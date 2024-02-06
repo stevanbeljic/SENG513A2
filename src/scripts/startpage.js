@@ -4,7 +4,8 @@ function readName(){
     if(tempname == ''){
         alert('Name can not be empty');
     } else {
-        localStorage.setItem('username', tempname);
+        const user = new User(tempname);
+        localStorage.setItem('User', JSON.stringify(user));
         window.location.href = 'quizmenu.html';
     }
 }
