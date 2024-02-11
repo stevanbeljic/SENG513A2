@@ -1,17 +1,49 @@
-class Quiz{
+class Quiz {
 
     score = 0;
     attempts = 0;
     quizQuestions;
+    gotCorrect = false;
+    diffIndex = 0;
+    num_answered = 0;
+    difficulties = ['easy', 'medium', 'hard'];
 
     formatQuestion(obj) {
         return new Question(obj.question, obj.correct_answer, obj.incorrect_answers[0], obj.incorrect_answers[1], obj.incorrect_answers[2], obj.difficulty);
     }
 
-    *questionGenerator(){
-        const tempQuestion = this.quizQuestions[this.attempts];
+    incrementAttempts(){
         this.attempts++;
-        yield tempQuestion;
+        if(this.attempts > this.quizQuestions.length){
+            this.attempts = 1;
+        }
+    }
+
+    *questionGenerator(){
+
+        while(true){
+            let tempQuestion = this.quizQuestions[this.attempts];
+            if(this.gotCorrect === true){
+                //console.log("diff index: "+this.difficulties[this.diffIndex]);
+                if(tempQuestion.difficulty !== this.difficulties[this.diffIndex]){
+                    this.incrementAttempts();
+                    continue;
+                }
+                this.incrementAttempts();
+                yield tempQuestion;
+            } else {
+                //console.log("diff index: "+this.difficulties[this.diffIndex]);
+                if(tempQuestion.difficulty !== this.difficulties[this.diffIndex]){
+                    this.incrementAttempts();
+                    continue;
+                }
+                
+                this.incrementAttempts();
+                yield tempQuestion;
+            }
+            this.attempts++;
+            yield tempQuestion;
+        } 
     }
 
     async fetchQuiz() {
@@ -27,9 +59,6 @@ class Quiz{
                 this.quizQuestions = questions;
             })
             .catch(error => console.error('Error:', error));
-
-        
-        console.log(this.quizQuestions);
     }
     
 }
@@ -174,16 +203,18 @@ async function start(){
             return ;
         }
 
+        game.num_answered++;
         const selected = event.target.innerHTML;
         const correctSelection = game.quizQuestions[game.attempts-1].correctOption;
 
         if (selected === correctSelection){
             game.score+=10;
             updateScore(game.score);
-            
             highlightCorrect(correctSelection, selected);
+            game.diffIndex = Math.min(2, game.diffIndex+1);
+            game.gotCorrect = true;
 
-            if(game.attempts > 9) {
+            if(game.num_answered > 9) {
                 gameOver(game.score);
             }
 
@@ -194,8 +225,10 @@ async function start(){
             }, 1000);
         } else {
             highlightCorrect(correctSelection, selected);
+            game.diffIndex = Math.max(0, game.diffIndex-1);
+            game.gotCorrect = false;
 
-            if(game.attempts > 10) {
+            if(game.num_answered > 9) {
                 gameOver(game.score);
             }
 
