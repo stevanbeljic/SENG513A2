@@ -126,19 +126,19 @@ function printName(){
     document.getElementById('namep').innerHTML = username+' is here';
 }
 
-function displayQuestion(question){
-    document.getElementById('question').innerHTML = question.questionText;
+function displayQuestion(){
+    document.getElementById('question').innerHTML = this.questionText;
     const occupiedSpaces = [];
     
     let placement = Math.floor((Math.random() * 4) + 1);
-    document.getElementById('option'+placement).innerHTML = question.correctOption;
+    document.getElementById('option'+placement).innerHTML = this.correctOption;
     occupiedSpaces.push(placement);
 
     for(let x = 1; x <= 3; x++){
         while (occupiedSpaces.includes(placement)){
             placement = Math.floor((Math.random() * 4) + 1);
         }
-        document.getElementById('option'+placement).innerHTML = question['incorrect'+x];
+        document.getElementById('option'+placement).innerHTML = this['incorrect'+x];
         occupiedSpaces.push(placement);
     }
 }
@@ -221,7 +221,7 @@ async function start(){
             setTimeout(() => {
                 let questionGenerated = game.questionGenerator().next();
                 const question = questionGenerated.value;
-                displayQuestion(question);
+                displayQuestion.call(question);
             }, 1000);
         } else {
             highlightCorrect(correctSelection, selected);
@@ -235,7 +235,7 @@ async function start(){
             setTimeout(() => {
                 let questionGenerated = game.questionGenerator().next();
                 const question = questionGenerated.value;
-                displayQuestion(question);
+                displayQuestion.call(question);
             }, 1000);
         }
     })
@@ -243,6 +243,6 @@ async function start(){
     const questionGenerator = game.questionGenerator();
     let questionGenerated = questionGenerator.next();
     const question = questionGenerated.value;
-    displayQuestion(question);
+    displayQuestion.call(question);
 
 }
